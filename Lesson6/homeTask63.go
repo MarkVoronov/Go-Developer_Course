@@ -1,6 +1,5 @@
 package main
 
-
 import "fmt"
 
 type contact struct {
@@ -8,7 +7,7 @@ type contact struct {
 	Number, Date string
 }
 
-func (w contact) show() string {
+func (w contact) String() string { // Переопределяем метод String для структуры contract
 	return fmt.Sprintf("Договор № %s от %s", w.Number, w.Date)
 }
 
@@ -20,6 +19,6 @@ func main() {
 		Date:   "2024-01-31",
 	}
 
-	fmt.Println(w.show())
+	fmt.Println(w)
 
 }
