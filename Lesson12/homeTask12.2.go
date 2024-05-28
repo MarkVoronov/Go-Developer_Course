@@ -21,7 +21,7 @@ type Sparrow struct{}
 func (s Sparrow) Fly() {
 	fmt.Println("Воробей - Умею летать!")
 }
-func main2() {
+func main() {
 	var d, s Bird
 	d = Duck{}
 	Do(d)
