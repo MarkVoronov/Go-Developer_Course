@@ -1,34 +1,11 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
 )
-
-// Обертка для responseWriter, чтобы мы залогировали ответ сервера
-type responseWriter struct {
-	http.ResponseWriter
-	statusCode int
-	body       *bytes.Buffer
-}
-
-func (rw *responseWriter) WriteHeader(code int) {
-	rw.statusCode = code
-	rw.ResponseWriter.WriteHeader(code)
-}
-
-func (rw *responseWriter) Write(b []byte) (int, error) {
-	rw.body.Write(b)
-	return rw.ResponseWriter.Write(b)
-}
-
-func NewResponseWriter(w http.ResponseWriter) *responseWriter {
-	// Значение по умолчанию - 200 OK
-	return &responseWriter{w, http.StatusOK, new(bytes.Buffer)}
-}
 
 func main() {
 
@@ -77,15 +54,7 @@ func logMiddleware(l *log.Logger) func(h http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 			l.Println("url:", r.URL) // логируем запрос
-			
-			// Создаём обёртку для http.ResponseWriter
-			rw := NewResponseWriter(w)
-
-			h.ServeHTTP(rw, r)
-
-			// Логируем ответ
-			l.Printf("Response status: %d", rw.statusCode)
-			l.Printf("Response body: %s", rw.body.String())
+			h.ServeHTTP(w, r)
 
 		})
 	}
